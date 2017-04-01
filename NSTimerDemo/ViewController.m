@@ -10,6 +10,10 @@
 
 @interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UILabel *label;
+
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 @implementation ViewController
@@ -17,6 +21,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+}
+
+- (void)timerAction:(NSTimer *)timer
+{
+    static NSInteger count = 0;
+    self.label.text = [NSString stringWithFormat:@"%zd", ++count];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.timer setFireDate:[NSDate distantFuture]];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.timer setFireDate:[NSDate distantPast]];
 }
 
 
